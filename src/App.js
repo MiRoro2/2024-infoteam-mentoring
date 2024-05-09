@@ -10,8 +10,6 @@ function App() {
     setResult(Number(num1) + Number(num2));
   };
 
-  // asdfsdfweflkwejrlkwej
-
   return (
     <div className="App">
       <input
