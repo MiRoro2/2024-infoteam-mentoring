@@ -1,33 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
-  const [num1, setNum1] = useState(0);
-  const [num2, setNum2] = useState(0);
-  const [result, setResult] = useState(0);
+  const URL = "https://api.api-ninjas.com/v1/facts";
+  const [data, setData] = useState([]);
 
-  const add = () => {
-    setResult(Number(num1) + Number(num2));
-  };
+  useEffect(() => {
+    fetch(URL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": "tM/6wxBaSOQGsSquBDWq7w==Yg2Pb9H39eUpPGXl",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setData(data);
+      });
+  }, []);
 
-  return (
-    <div className="App">
-      <input
-        type="number"
-        onChange={(e) => {
-          setNum1(e.target.value);
-        }}
-      />
-      <input
-        type="number"
-        onChange={(e) => {
-          setNum2(e.target.value);
-        }}
-      />
-      <button onClick={add}>더하다</button>
-      <h1>{result}</h1>
-    </div>
-  );
+  return <div className="App">{data[0] && data[0].fact}</div>;
 }
 
 export default App;
