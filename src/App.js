@@ -1,31 +1,42 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 function App() {
-  const [num1, setNum1] = useState(0);
-  const [num2, setNum2] = useState(0);
-  const [result, setResult] = useState(0);
+  const URL = "https://api.api-ninjas.com/v1/airports";
+  const [search, setSearch] = useState(null);
 
-  const add = () => {
-    setResult(Number(num1) + Number(num2));
-  };
+  const inputRef = useRef();
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    if (!search) return;
+    fetch(`${URL}?country=${search}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": "tM/6wxBaSOQGsSquBDWq7w==Yg2Pb9H39eUpPGXl",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setData(data);
+      });
+  }, [search]);
 
   return (
     <div className="App">
-      <input
-        type="number"
-        onChange={(e) => {
-          setNum1(e.target.value);
+      <input placeholder="Country name" type="text" ref={inputRef} />
+      <button
+        onClick={() => {
+          setSearch(inputRef.current.value ?? "");
         }}
-      />
-      <input
-        type="number"
-        onChange={(e) => {
-          setNum2(e.target.value);
-        }}
-      />
-      <button onClick={add}>더하다</button>
-      <h1>{result}</h1>
+      >
+        GO
+      </button>
+      {data && data.map((item) => <div>{item.name}</div>)}
     </div>
   );
 }
